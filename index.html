@@ -1,173 +1,113 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿<!doctype html>
+<html>
 <head>
-	<meta charset="utf-8" />
-	<title>天津市海鑫融智投资咨询有限公司</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<!-- basic styles -->
-	<link href="css/bootstrap.min.css" rel="stylesheet" />
-	<link rel="stylesheet" href="css/font-awesome.css" />
-	<link rel="stylesheet" href="css/style.css" />
+<meta charset="utf-8">
+<title>智能课堂</title>
+<link href="style/weibo.css" rel="stylesheet" type="text/css" />
+    <script src="vue.js"></script><!-- 使用的是1.6版 -->
+    <script src="vue-resource.js"></script>
+    <script>
+       window.onload=function(){
+        var URL='weibo.php';
+
+        Vue.filter('date',function(input){
+            var oDate=new Date(input);
+            return oDate.getFullYear()+'-'+(oDate.getMonth()+1)+'-'+oDate.getDate()+' '+oDate.getHours()+':'+
+            oDate.getMinutes()+':'+oDate.getSeconds()
+        });
+
+            new Vue({
+                el:'body',
+                data:{
+                    t1:'',
+                    msgData:[]
+                },
+                methods:{
+                    add:function(){
+                        this.$http({
+                            url:URL,
+                            data:{
+                                act:'add',
+                                content:this.t1
+                            }
+                        }).then(function(res){
+                            console.log(res.data)
+                            var json=res.data;
+                            this.msgData.unshift({
+                                content:this.t1,
+                                time:json.time,
+                                acc:0,
+                                ref:0,
+                                id:json.id
+                            });
+                            this.t1='';
+                        })   //创建信息
+                    },
+                    getPageData:function(n){
+                        this.$http({
+                            url:URL,
+                            data:{
+                                act:'get',
+                                page:n
+                            }
+                        }).then(function(res){
+                            var arr=res.data;
+                            for (var i = 0; i < arr.length; i++) {
+                                this.msgData.push({
+                                    content:arr[i].content,
+                                    time:arr[i].time,
+                                    acc:arr[i].acc,
+                                    ref:arr[i].ref,
+                                    id:arr[i].id
+
+                                })
+                            }
+                        });   //读取信息
+                    }
+                },
+                created:function(){
+                    this.getPageData(1)
+                    
+                }
+            });
+
+
+       }
+    </script>
 </head>
+
 <body>
-<div class="container-fluid"><!-- -fluid -->
-    <div class="row banner">
-        <div class="col-md-12">
-            <div class="col-md-1">
-                <img src="images/logo.png" alt="公司logo" class="img-responsive center-block" />
-            </div>
-            <div class="col-md-11 menu">
-                <ul>
-                    <li><a href="">联系我们</a></li>
-                    <li><a href="">产品与服务</a></li>
-                    <li><a href="">关于我们</a></li>
-                    <li><a href="">首页</a></li>
-                </ul>
-            </div>
-        </div>
-        <img src="images/text.png" alt="公司文字logo" class="img-responsive text-logo">
-    </div>
-    <div class="row team">
-        <div class="col-md-12">
-            <div class="col-md-4 mt15">
-                <img src="images/im-familiy.png" alt="我们团队" class="img-responsive center-block" />
-            </div>
-            <div class="col-md-8 pl40">
-                <div class="mt22">
-                    <img src="images/ourTeam.png" alt="我们的团队" class="img-responsive" />
-                </div>
-                <div class="mt15">
-                    天津市海鑫融智科技发展有限公司（Hysenritz Technology Development Co,. 
-                    Ltd.）是由天津市海鑫融智投资咨询有限公司于2015年1月5日投资成立的一家科技型
-                    公司。公司成立之初是为了调整母公司的业务结构，剥离出IT外包业务。但随着“融智
-                    教育云平台（Hysenritz EduCloud Platform）”项目的启动，公司的经营战略被重新
-                    定义，即以“互联网+教育”为核心理念，专业从事教育云平台的研发、课程资源制作、
-                    直播服务以及移动应用的开发，将丰富的移动互联网项目开发经验，结合先进的数字媒
-                    体技术，服务于高等院校教育和职业化教育领域……
-                </div>
-            </div>
+<div class="znsArea">
+<!--留言-->
+     <div class="takeComment">
+        <textarea name="textarea" class="takeTextField" id="tijiaoText" v-model="t1"></textarea>
+        <div class="takeSbmComment">
+            <input type="button" class="inputs" value="" @click="add" />
+            <span>(可按 Enter 回复)</span>
         </div>
     </div>
-    <div class="row product">
-        <div class="col-md-12 plr0">
-            <div class="col-md-12 pt50">
-                <img src="images/product_service.png" alt="产品与服务" class="img-responsive center-block" />
-            </div>
-            <div class="col-md-12 plr0 pt50">
-                <div class="col-md-12 plr0 pt50">
-                    <div class="col-md-3 bdr">
-                        <img src="images/01.png" class="img-responsive center-block" />
-                        <img src="images/title_01.png" class="img-responsive title" />
-                        <div class="con">
-                            <p class="pt40">IT 运营服务</p>
-                            <p>管理 & IT 服务</p>
-                            <p>项目管理 </p>
-                        </div>
-                        <div class="title_pic_01">
-                            <img src="images/zixun.png" class="img-responsive" />
-                        </div>
-                    </div>
-                    <div class="col-md-3 bdr">
-                        <img src="images/02.png" class="img-responsive center-block" />
-                        <img src="images/title_02.png" class="img-responsive title" />
-                        <div class="con">
-                            <p class="pt40">用户体验设计</p>
-                            <p>IT架构设计</p>
-                            <p>软件开发</p>
-                            <p>售后支持</p>
-                        </div>
-                        <div class="title_pic_02">
-                            <img src="images/app.png" class="img-responsive" />
-                        </div>
-                    </div>
-                    <div class="col-md-3 bdr">
-                        <img src="images/03.png" class="img-responsive center-block" />
-                        <img src="images/title_03.png" class="img-responsive title" />
-                        <div class="con">
-                            <p class="pt40">广告策划及设计</p>
-                            <p>画册设计</p>
-                            <p>试听识别</p>
-                            <p>其他营销物料设计</p>
-                        </div>
-                        <div class="title_pic_03">
-                            <img src="images/video.png" class="img-responsive" />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <img src="images/04.png" class="img-responsive center-block" />
-                        <img src="images/title_04.png" class="img-responsive title" />
-                        <div class="con">
-                            <p class="pt40">平台设计与实现</p>
-                        </div>
-                        <div class="title_pic_04">
-                            <img src="images/mooc.png" class="img-responsive" />
-                        </div>
-                    </div>
-                </div>
+<!--已留-->
+    <div class="commentOn">
+        <div class="noContent" v-show="msgData.length==0">暂无留言</div>
+        <div class="messList">
+        	<div class="reply" v-for="item in msgData">
+                <p class="replyContent">{{item.content}}</p>
+                <p class="operation">
+                    <span class="replyTime">{{item.time | date}}</span>
+                    <span class="handle">
+                    	<a href="javascript:;" class="top">{{item.acc}}</a>
+                        <a href="javascript:;" class="down_icon">{{item.ref}}</a>
+                        <a href="javascript:;" class="cut">删除</a>
+                    </span>
+                </p>
             </div>
         </div>
-    </div>
-    <div class="row collaborate">
-        <div class="col-md-12 plr0">
-            <div class="col-md-12 pt50 pb30">
-                <img src="images/collaborate.png" alt="合作支持" class="img-responsive center-block" />
-            </div>
-            <div class="col-md-12 plr0 pt50 pb30">
-                <div class="col-md-12 plr0 bdtb">
-                    <div class="col-md-2 bdr">
-                        <img src="images/jinfang.png" alt="津房置换" class="img-responsive center-block" />
-                    </div>
-                    <div class="col-md-2 bdr">
-                        <img src="images/zhongxing.png" alt="中兴" class="img-responsive center-block" />
-                    </div>
-                    <div class="col-md-2 bdr">
-                        <img src="images/nankai.png" alt="南开大学" class="img-responsive center-block" />
-                    </div>
-                    <div class="col-md-2 bdr">
-                        <img src="images/tjshangda.png" alt="天津商业大学" class="img-responsive center-block" />
-                    </div>
-                    <div class="col-md-2 bdr">
-                        <img src="images/wangfujing.png" alt="北京王府井" class="img-responsive center-block" />
-                    </div>
-                    <div class="col-md-2 bdr">
-                        <img src="images/yinchuan.png" alt="银川市民大厅" class="img-responsive center-block" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row foot">
-        <div class="col-md-12">
-            <div class="col-md-7">
-                <div class="col-md-12 fw">FOLLOWW</div>
-                <div class="col-md-1">
-                    <i class="fa fa-weibo fa-3x"></i>
-                </div>
-                <div class="col-md-1">
-                    <i class="fa fa-qq fa-3x"></i>
-                </div>
-                <div class="col-md-1">
-                    <i class="fa fa-wechat fa-3x"></i>
-                </div>
-            </div>
-            <div class="col-md-5">
-                <div class="col-md-12 fw">CONTACT  US</div>
-                <div class="col-md-12 word_sm">天津市宾水西道399号（天津软件人才培训基地实训B511）</div>
-                <div class="col-md-12 word_sm_fw">Call us 022-59848548. 9:30 am-6:00 pm</div>
-                <div class="col-md-12 fw">RECRUITMENT</div>
-                <div class="col-md-12 word_sm">前端开发工程师&nbsp;&nbsp;&nbsp;&nbsp;产品设计师&nbsp;&nbsp;&nbsp;&nbsp;UI设计师<br><br><br></div>
-                <div class="col-md-12 word_sm bdt pt10">Copyright© 2014 hysenritz.com all right reserverd. Powered by 海鑫融智</div>
-            </div>
+        <div class="page">
+        	<a href="javascript:;" class="active">1</a>
+        	<a href="javascript:;">2</a>
+        	<a href="javascript:;">3</a>
         </div>
     </div>
 </div>
 </body>
-<script src="js/jquery-1.10.2.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<!--[if IE]>
-<script src="js/jquery-2.0.3.min.js"></script>
-<![endif]-->
-<!-- <![endif]-->
-<script src="js/index.js"></script>
 </html>
-
