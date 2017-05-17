@@ -1,0 +1,11 @@
+*{margin: 0;padding:0;list-style: none}
+#mages{width: 400px;height: 500px;background: red;margin: auto; position: relative;top: 50px;}
+#mages ul{position: absolute;}
+#mages ul li{position: absolute;}
+#mages .big .meark_left{width: 200px;height: 400px;background-color: blue;filter:alpha(opacity:0);opacity: 0;z-index: 3000;
+position: absolute;}
+#mages .big .meark_right{width: 200px;height: 400px;background-color: red;filter:alpha(opacity:0);opacity: 0;z-index: 3000;
+position: absolute;left: 200px;}
+#mages .pic{width: 400px;height: 100px;background: black;position: relative;top: 400px;overflow: hidden;}
+#mages .pic ul{position: absolute;}
+#mages .pic ul li{float: left;position: relative;filter:alpha(opacity:60);opacity: 0.6;}

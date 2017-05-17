@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>轮播图</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script type="text/javascript" src="move.js"></script>
+	<script>
+		window.onload=function(){
+			var oDiv=document.getElementById('mages');
+			var oUl=oDiv.getElementsByTagName('ul')[0];
+			var aBig=oUl.getElementsByTagName('li');
+			var aPrev=oUl.getElementsByClassName('prev')[0];
+			var aNext=oUl.getElementsByClassName('next')[0];
+			var mL=oUl.getElementsByClassName('meark_left')[0];
+			var mR=oUl.getElementsByClassName('meark_right')[0];
+			var aPic=oDiv.getElementsByClassName('pic')[0];
+			var sUl=aPic.getElementsByTagName('ul')[0];
+			var aSmli=aPic.getElementsByTagName('li');
+			var now=0;
+			var nowZ=2;
+			sUl.style.width=aSmli[0].offsetWidth*aSmli.length+'px'
+
+			mL.onmouseover=function(){
+				aPrev.style.display='block'
+			}
+			mL.onmouseout=function(){
+				aPrev.style.display='none'
+			}
+			mR.onmouseover=function(){
+				aNext.style.display='block'
+			}
+			mR.onmouseout=function(){
+				aNext.style.display='none'
+			}
+
+			function tab(){
+				aBig[now].style.zIndex=nowZ++;
+				for (var i = 0; i < aSmli.length; i++) {
+					move(aSmli[i],'opacity',60)
+				}
+				move(aSmli[now],'opacity',100)
+				aBig[now].style.height=0;
+				move(aBig[now],'height',400)
+				if (now==0) {
+					move(sUl,'left',0)
+				} else if(now==aSmli.length-1){
+					move(sUl,'left',-(now-2)*aSmli[0].offsetWidth)
+				}else{
+					move(sUl,'left',-(now-1)*aSmli[0].offsetWidth)
+				}
+				
+				
+			}
+			for (var i = 0; i < aSmli.length; i++) {
+				aSmli[i].index=i;
+				aSmli[i].onclick=function(){
+					if (this.index==now) {return}
+					now=this.index
+					tab()
+				}
+				aSmli[i].onmouseover=function(){
+					move(this,'opacity',100)
+				}
+				aSmli[i].onmouseout=function(){
+					if (this.index!=now) {
+						move(this,'opacity',60)
+					}			
+				}
+
+				mL.onclick=function(){
+					now--;
+					if (now==-1) {
+						now=aSmli.length-1
+					}
+					tab()
+				}
+				mR.onclick=function(){
+					now++;
+					if (now==aSmli.length) {
+						now=0
+					}
+					tab()
+				}
+			}
+			timer=setInterval(mR.onclick,2000);
+			sUl.onmouseover=function(){
+				clearInterval(timer)
+			}
+			sUl.onmouseout=function(){
+				timer=setInterval(mR.onclick,2000);
+			}
+
+		}
+	</script>
+</head>
+<body>
+<div id="mages" class="play">
+	<ul class="big">
+		<div class="prev" style="width: 80px;height: 80px;background: white;z-index: 2999; position: absolute;top: 150px;display: none">左</div>
+		<div class="next"style="width: 80px;height: 80px;background: white;z-index: 2999; position: absolute;top: 150px;left: 320px;display: none">右</div>
+		<a href="javascritpt:;" class="meark_left"></a>
+		<a href="javascritpt:;" class="meark_right"></a>
+		<li style="z-index: 1;width: 400px;height: 400px;background: green;"></li>
+		<li style="width: 400px;height: 400px;background: blue;"></li>
+		<li style="width: 400px;height: 400px;background: yellow;"></li>
+		<li style="width: 400px;height: 400px;background: #333;"></li>
+		<li style="width: 400px;height: 400px;background: #666;"></li>
+		<li style="width: 400px;height: 400px;background: #999;"></li>
+	</ul> 
+	<div class="pic">
+		<ul>
+			<li style="filter: 100;opacity: 1; width: 132px;height: 80px;background: green;margin:10px 0"></li>
+			<li style="width: 132px;height: 80px;background: blue;margin:10px 0"></li>
+			<li style="width: 132px;height: 80px;background: yellow;margin:10px 0"></li>
+			<li style="width: 132px;height: 80px;background: #333;margin:10px 0"></li>
+			<li style="width: 132px;height: 80px;background: #666;margin:10px 0"></li>
+			<li style="width: 132px;height: 80px;background: #999;margin:10px 0"></li>
+		</ul>
+	</div>
+</div>	
+</body>
+</html>
